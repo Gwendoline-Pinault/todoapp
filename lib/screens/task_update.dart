@@ -14,18 +14,36 @@ class UpdateTaskPage extends StatefulWidget {
 enum Prio {low, medium, high}
 
 class _UpdateTaskPage extends State<UpdateTaskPage> {
+  Prio prioSelected = Prio.medium;
+
+  @override
+  void initState() {
+    super.initState();
+
+    switch (widget.data['priority'] as String) {
+      case "faible":
+        setState(() {
+          prioSelected = Prio.low;
+        });
+        break;
+      case "moyenne" :
+        setState(() {
+          prioSelected = Prio.medium;
+        });
+        break;
+      case "haute" :
+        setState(() {
+          prioSelected = Prio.high;
+        });
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
   final TextEditingController taskController = TextEditingController(text: widget.data['title']);
   final TasksService taskService = TasksService();
-  
- Prio prioSelected = switch (widget.data['priority'] as String) {
-    "faible"=> Prio.low,
-    "moyenne" => Prio.medium,
-    "haute" => Prio.high,
-    _ => Prio.medium,
-  };
 
     return Scaffold(
       appBar: AppBar(
@@ -43,17 +61,20 @@ class _UpdateTaskPage extends State<UpdateTaskPage> {
                 Text(
                   "Modifier la tâche", 
                   textAlign: TextAlign.center, 
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.blue.shade600
                   ),
+                ),
                 TextField(
                   controller: taskController,
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(height: 30),
                 Row(
                   children: [
                     Text("Priorité : "),
-                    SizedBox(width: 15),
                     Expanded(child: 
                       Center(child: 
                         SegmentedButton(
@@ -73,12 +94,17 @@ class _UpdateTaskPage extends State<UpdateTaskPage> {
                     )
                   ],
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 15,
+                  spacing: 25,
                   children: [
                     TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.blue.shade600), 
+                        foregroundColor:  WidgetStateProperty.all(Colors.white),
+                        overlayColor: WidgetStateProperty.all(Colors.blue.shade800),
+                      ),
                       onPressed: () {
                         String newTitle = taskController.text;
                         String newPriority = switch (prioSelected) {
@@ -93,6 +119,11 @@ class _UpdateTaskPage extends State<UpdateTaskPage> {
                       child: Text('Modifier'),
                     ),
                     TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.blue.shade600), 
+                        foregroundColor:  WidgetStateProperty.all(Colors.white),
+                        overlayColor: WidgetStateProperty.all(Colors.blue.shade800),
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },

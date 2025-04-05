@@ -57,9 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Colors.black, 
                 child: Text(
                   "Connexion Firebase",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade600),
+                  style: TextStyle(
+                    fontSize: 20, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.blue.shade600
                   ),
                 ),
+              ),
               SizedBox(height: 20),
               TextField(
                 controller: emailController,

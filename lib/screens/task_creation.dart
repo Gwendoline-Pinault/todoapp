@@ -37,17 +37,20 @@ class _AddTaskPage extends State<AddTaskPage> {
                 Text(
                   "Nouvelle tâche", 
                   textAlign: TextAlign.center, 
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade600),
+                  style: TextStyle(
+                    fontSize: 20, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.blue.shade600
                   ),
+                ),
                 TextField(
                   controller: taskController,
                   decoration: InputDecoration(labelText: 'Description', labelStyle: TextStyle(fontSize: 14))
                 ),
-                SizedBox(height: 15,),
+                SizedBox(height: 20),
                 Row(
                   children: [
                     Text("Priorité : "),
-                    SizedBox(width: 15),
                     Expanded(child: 
                       Center(child: 
                         SegmentedButton(
@@ -67,15 +70,16 @@ class _AddTaskPage extends State<AddTaskPage> {
                     )
                   ],
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 15,
+                  spacing: 25,
                   children: [
                     TextButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(Colors.blue.shade600), 
-                        foregroundColor:  WidgetStateProperty.all(Colors.white)
+                        foregroundColor:  WidgetStateProperty.all(Colors.white),
+                        overlayColor: WidgetStateProperty.all(Colors.blue.shade800),
                       ),
                       onPressed: () {
                         String newTitle = taskController.text;
@@ -93,7 +97,8 @@ class _AddTaskPage extends State<AddTaskPage> {
                     TextButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(Colors.blue.shade600), 
-                        foregroundColor:  WidgetStateProperty.all(Colors.white)
+                        foregroundColor:  WidgetStateProperty.all(Colors.white),
+                        overlayColor: WidgetStateProperty.all(Colors.blue.shade800),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
