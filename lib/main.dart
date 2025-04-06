@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      // Si l'utilisateur est connecté, on affiche la liste des tâches, sinon renvoyé sur la page de connexion
       home: LoginScreen(),
     );
   }

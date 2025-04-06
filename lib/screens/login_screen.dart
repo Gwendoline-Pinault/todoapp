@@ -3,9 +3,6 @@ import 'package:todoapp/screens/home_screen.dart';
 import 'package:todoapp/services/auth_service.dart';
 import 'package:todoapp/widgets/tasks_widget.dart';
 
-void navHome(context) {
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage(title: "Mes tâches")));
-}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +10,7 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
@@ -23,7 +21,9 @@ class _LoginScreenState extends State<LoginScreen> {
     var user = await authService.signIn(emailController.text, passwordController.text);
     if (user != null) {
       notification(context, "Connexion réussie : ${user.email}", false);
-      navHome(context);
+
+      // navigate to homepage with the tasks list
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage(title: "Mes tâches")));
     } else {
       notification(context, "Échec de la connexion", true);
     }
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(labelText: "Mot de passe"),
                 obscureText: true,
               ),
-              SizedBox(height: 20), // ajoute un espace après les inputs
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 25,

@@ -17,7 +17,9 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
 enum Prio {none, low, medium, high}
+
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController taskController = TextEditingController();
@@ -72,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 children: [
                   Center(
+                    // Button to get the tasks with the priority filter value
                     child: SegmentedButton(
                       segments: [
                         ButtonSegment(value: Prio.none, label: Text("Aucun filtre")),
@@ -84,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           filter = selection.first;
 
+                          // get the priority value for firebase
                           switch (filter) {
                             case Prio.none :
                               break;
@@ -101,90 +105,94 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
                     ),
                   ),
-                  SizedBox(height: 30),  
-                  Expanded(child: ListView(
-                    children : snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-                      Color prioColor;
+                  SizedBox(height: 30),
+                  Expanded(child: snapshot.data!.docs.isNotEmpty ? 
+                    (ListView(
+                      children : snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                        Color prioColor;
 
-                      switch (data['priority']) {
-                        case 'haute' : 
-                          prioColor =  Colors.red;
-                          break;
-                        case 'moyenne':
-                          prioColor = Colors.orange;
-                          break;
-                        case'faible': 
-                        prioColor = Colors.green;
-                        default: 
-                        prioColor = Colors.black;
-                      }
+                        // get the priority color
+                        switch (data['priority']) {
+                          case 'haute' : 
+                            prioColor =  Colors.red;
+                            break;
+                          case 'moyenne':
+                            prioColor = Colors.orange;
+                            break;
+                          case 'faible': 
+                          prioColor = Colors.green;
+                          default: 
+                          prioColor = Colors.black;
+                        }
 
-                      return  Card(
-                        elevation: 2,
-                        color: Colors.white,
-                        margin: EdgeInsets.all(5),
-                          child: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          data['title'],
-                                          style: TextStyle(
-                                            fontSize: 18, 
-                                            decoration: data['status'] ? TextDecoration.lineThrough : TextDecoration.none),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text("Priorité : "),
-                                            Text(
-                                              data['priority'],
-                                              style: TextStyle(color: prioColor),
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                        return  Card(
+                          elevation: 2,
+                          color: Colors.white,
+                          margin: EdgeInsets.all(5),
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            data['title'],
+                                            style: TextStyle(
+                                              fontSize: 18, 
+                                              decoration: data['status'] ? TextDecoration.lineThrough : TextDecoration.none),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text("Priorité : "),
+                                              Text(
+                                                data['priority'],
+                                                style: TextStyle(color: prioColor),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                // état de la tâche (faite ou non)
-                                Checkbox(
-                                  value: data['status'],
-                                  onChanged: (value) {
-                                    FirebaseFirestore.instance
-                                        .collection('users/$userId/tasks')
-                                        .doc(document.id)
-                                        .update({
-                                      'status': value,
-                                    });
-                                  },
-                                ), // bouton pour modifier la tâche
-                                IconButton(
-                                  onPressed: () {
-                                    var documentId = document.id;
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateTaskPage(documentId: documentId, data: data)));
-                                  },
-                                  icon: Icon(Icons.edit)
-                                ),
-                                // bouton pour supprimer la tâche
-                                IconButton(
-                                  onPressed: () {
-                                    taskService.removeTask(document.id);
-                                  },
-                                  icon: Icon(Icons.delete)
-                                ),
-                              ],
-                            ),
-                          )
-                        );
-                      }).toList(),
-                    )
+                                  // task status
+                                  Checkbox(
+                                    value: data['status'],
+                                    onChanged: (value) {
+                                      FirebaseFirestore.instance
+                                          .collection('users/$userId/tasks')
+                                          .doc(document.id)
+                                          .update({
+                                        'status': value,
+                                      });
+                                    },
+                                  ), 
+                                  // update task button
+                                  IconButton(
+                                    onPressed: () {
+                                      var documentId = document.id;
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateTaskPage(documentId: documentId, data: data)));
+                                    },
+                                    icon: Icon(Icons.edit)
+                                  ),
+                                  // delete task button
+                                  IconButton(
+                                    onPressed: () {
+                                      taskService.removeTask(document.id);
+                                    },
+                                    icon: Icon(Icons.delete)
+                                  ),
+                                ],
+                              ),
+                            )
+                          );
+                        }
+                      ).toList())
+                    ) : Text("Aucune tâche pour le moment"), // if no document, render this message
                   )
                 ]
               )
