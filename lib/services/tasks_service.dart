@@ -14,7 +14,7 @@ class TasksService {
           'priority': priority,
         })
         .then((value) => notification(context, "Tâche ajoutée avec succès", false))
-        .catchError((error) => notification(context, "Erreur lors de la création : $error", true));
+        .catchError((error) => notification(context, "Erreur lors de la création", true));
   }
 
   Future<void> updateTask(String docId, title, bool status, String priority, context) async {
@@ -26,7 +26,7 @@ class TasksService {
         'priority': priority,
       })
       .then((value) => notification(context, "Tâche modfiée avec succès !", false))
-      .catchError((error) => notification(context, "Erreur lors de la modfication de la tâche : $error", true));
+      .catchError((error) => notification(context, "Erreur lors de la modfication de la tâche", true));
   }
 
   Future<void> removeTask(String docId) async {

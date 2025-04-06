@@ -1,23 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todoapp/widgets/tasks_widget.dart';
 
 bool isConnected() {
   User? user = FirebaseAuth.instance.currentUser;
   return user != null;
 }
 
-void logoutUser() async {
+void logoutUser(context) async {
   var auth = AuthService();
   await auth.signOut();
-  print("L'utilisateur a bien été déconnecté.");
+  notification(context, "L'utilisateur a bien été déconnecté", false);
 }
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Vérifier l'utilisateur connecté
+  // Verify if user is logged in
   User? get currentUser => _auth.currentUser;
-  // Inscription utilisateur
-  Future<User?> signUp(String email, String password) async {
+  
+  // User inscription
+  Future<User?> signUp(context, String email, String password) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -25,13 +27,13 @@ class AuthService {
       );
       return userCredential.user;
     } catch (e) {
-      print("Erreur d'inscription : $e");
+      notification(context, "Erreur lors de l'inscription", true);
       return null;
     }
   }
   
 // Connexion utilisateur
-  Future<User?> signIn(String email, String password) async {
+  Future<User?> signIn(context, String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -39,7 +41,7 @@ class AuthService {
       );
       return userCredential.user;
     } catch (e) {
-      print("Erreur de connexion : $e");
+      notification(context, "Erreur de connexion : utilisateur inconnu ou identifiants incorrects", true);
       return null;
     }
   }

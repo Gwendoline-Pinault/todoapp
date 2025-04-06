@@ -14,7 +14,6 @@ enum Prio {low, medium, high}
 
 class _AddTaskPage extends State<AddTaskPage> {
   final TextEditingController taskController = TextEditingController();
-  // TextEditingController priorityController = TextEditingController();
   final TasksService taskService = TasksService();
 
   Prio prioSelected = Prio.medium;
@@ -88,7 +87,6 @@ class _AddTaskPage extends State<AddTaskPage> {
                           Prio.medium => "moyenne",
                           Prio.high => "haute",
                         };
-                        //String newPriority = priorityController.text;
                         taskService.addTask(newTitle, false, newPriority, context);
                         Navigator.pop(context);
                       },

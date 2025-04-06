@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthService authService = AuthService();
 
   void loginUser(context) async {
-    var user = await authService.signIn(emailController.text, passwordController.text);
+    var user = await authService.signIn(context, emailController.text, passwordController.text);
     if (user != null) {
       notification(context, "Connexion réussie : ${user.email}", false);
 
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   
   void registerUser(context) async {
-    var user = await authService.signUp(emailController.text, passwordController.text);
+    var user = await authService.signUp(context, emailController.text, passwordController.text);
     if (user != null) {
       notification(context, "Inscription réussie : ${user.email}", false);
     } else {

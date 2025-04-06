@@ -13,6 +13,9 @@
 migrate_working_dir/
 firebase.json
 */firebase_options.dart
+.metadata
+pubspec.lock
+runner.exe.*
 
 # IntelliJ related
 *.iml
